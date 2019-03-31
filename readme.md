@@ -27,7 +27,8 @@ use nickdnk\ZeroBounce\Email;
 use nickdnk\ZeroBounce\Result;
 use nickdnk\ZeroBounce\ZeroBounce;
 
-$handler = new ZeroBounce('my_api_key');
+// You can modify the timeout using the second parameter. Default is 15.
+$handler = new ZeroBounce('my_api_key', 30);
 
 $email = new Email(
     
@@ -119,7 +120,7 @@ try {
 
 } catch (\nickdnk\ZeroBounce\APIError $exception) {
 
-   // Something happened. Perhaps a bad API key or insufficient credit
+   // Something happened. Perhaps a bad API key or insufficient credit.
 
 }
 ```
