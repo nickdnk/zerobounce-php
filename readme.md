@@ -80,25 +80,30 @@ try {
                 // Toxic or disposable.
                 break;
                 
-                // ... and so on.
+                
+            case Result::SUBSTATUS_ROLE_BASED:
+                // admin@, helpdesk@, info@ etc; not a personal email
+                break;
             
+            // ... and so on.
+                
         }
         
     } else if ($result->getStatus() === Result::STATUS_INVALID) {
         
-        // Invalid email
+        // Invalid email.
         
     } else if ($result->getStatus() === Result::STATUS_SPAMTRAP) {
         
-        // Spam-trap
+        // Spam-trap.
         
     } else if ($result->getStatus() === Result::STATUS_ABUSE) {
         
-        // Abuse
+        // Abuse.
         
     } else if ($result->getStatus() === Result::STATUS_CATCH_ALL) {
         
-        // Catch-all address, such as info@, help@ etc.
+        // Address is catch-all; not necessarily a private email.
         
     } else if ($result->getStatus() === Result::STATUS_UNKNOWN) {
         

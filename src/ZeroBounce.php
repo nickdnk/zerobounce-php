@@ -6,6 +6,7 @@ namespace nickdnk\ZeroBounce;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
+use Psr\Http\Message\ResponseInterface;
 
 class ZeroBounce
 {
@@ -15,19 +16,57 @@ class ZeroBounce
     /**
      * ZeroBounce constructor.
      *
-     * @param $apiKey
+     * @param string $apiKey
+     * @param int    $timeout
      */
-    public function __construct(string $apiKey)
+    public function __construct(string $apiKey, int $timeout = 15)
     {
 
         $this->apiKey = $apiKey;
         $this->client = new Client(
             [
                 'base_uri'        => 'https://api.zerobounce.net/v2/',
-                'timeout'         => 15,
+                'timeout'         => $timeout,
                 'connect_timeout' => 10
             ]
         );
+    }
+
+    /**
+     * @param ResponseInterface $response
+     *
+     * @return \stdClass
+     * @throws APIError
+     */
+    private function handleResponse(ResponseInterface $response): \stdClass
+    {
+
+        $json = json_decode($response->getBody());
+
+        if (!$json) {
+
+            throw new APIError(
+                'Failed to parse response from ZeroBounce as JSON. Possibly a server error. Message returned: '
+                . $response->getBody()
+            );
+
+        }
+
+        if (property_exists($json, 'error')) {
+
+            throw new APIError($json->error);
+
+        } else {
+
+            if (property_exists($json, 'Message')) {
+
+                throw new APIError($json->Message);
+            }
+
+        }
+
+        return $json;
+
     }
 
     /**
@@ -41,33 +80,18 @@ class ZeroBounce
 
         try {
 
-            $response = $this->client->get(
-                'validate',
-                [
-                    'query' => [
-                        'email'      => $email->getEmail(),
-                        'ip_address' => $email->getIpAddress() ?? '',
-                        'api_key'    => $this->apiKey
+            $json = $this->handleResponse(
+                $this->client->get(
+                    'validate',
+                    [
+                        'query' => [
+                            'email'      => $email->getEmail(),
+                            'ip_address' => $email->getIpAddress() ?? '',
+                            'api_key'    => $this->apiKey
+                        ]
                     ]
-                ]
+                )
             );
-
-            $json = json_decode($response->getBody());
-
-            if (!$json) {
-
-                throw new APIError(
-                    'Failed to parse response from ZeroBounce as JSON. Possibly a server error. Message returned: '
-                    . $response->getBody()
-                );
-
-            }
-
-            if ($json->error) {
-
-                throw new APIError($json->error);
-
-            }
 
             return new Result(
                 $json->address,
@@ -76,7 +100,7 @@ class ZeroBounce
                 $json->account,
                 $json->domain,
                 $json->did_you_mean,
-                $json->domain_age_days,
+                is_numeric($json->domain_age_days) ? (int)$json->domain_age_days : null,
                 $json->free_email,
                 $json->mx_found,
                 $json->mx_record,
@@ -95,18 +119,12 @@ class ZeroBounce
 
         } catch (RequestException $exception) {
 
-            $json = json_decode($exception->getResponse()->getBody());
+            $this->handleResponse($exception->getResponse());
 
-            if (!$json) {
-
-                throw new APIError(
-                    'Failed to parse response from ZeroBounce as JSON. Possibly a server error. Message returned: '
-                    . $exception->getResponse()->getBody()
-                );
-
-            }
-
-            throw new APIError($json->error);
+            throw new APIError(
+                'Failed to handle error response. Perhaps the ZeroBounce API has been modified. Response received: '
+                . $exception->getResponse()->getBody()
+            );
 
         } catch (TransferException $exception) {
 

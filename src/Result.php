@@ -40,7 +40,7 @@ class Result
 
     private $address, $status, $subStatus, $account, $domain, $didYouMean, $domainAgeDays, $freeEmail, $mxFound, $mxRecord, $smtpProvider, $user, $processedAt;
 
-    public function __construct(string $address, string $status, string $subStatus, ?string $account, ?string $domain, ?string $didYouMean, $domainAgeDays, bool $freeEmail, bool $mxFound, ?string $mxRecord, ?string $smtpProvider, User $user, $processedAt)
+    public function __construct(string $address, string $status, string $subStatus, ?string $account, ?string $domain, ?string $didYouMean, ?int $domainAgeDays, bool $freeEmail, bool $mxFound, ?string $mxRecord, ?string $smtpProvider, User $user, string $processedAt)
     {
 
         $this->address = $address;
@@ -113,9 +113,9 @@ class Result
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
-    public function getDomainAgeDays()
+    public function getDomainAgeDays(): ?int
     {
 
         return $this->domainAgeDays;
@@ -167,9 +167,9 @@ class Result
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getProcessedAt()
+    public function getProcessedAt(): string
     {
 
         return $this->processedAt;
