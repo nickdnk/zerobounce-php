@@ -1,0 +1,126 @@
+# ZeroBounce PHP Library
+
+This library will allow you to integrate the **ZeroBounce** API in your project using modern PHP7 and an OOP structure.
+
+### Prerequisites
+
+You need an active account at https://zerobounce.net to use this library. From there, grab your API Key under **API - Keys &amp; Info**. 
+
+
+### Installation
+
+To include this in your project, install it using Composer.
+
+As we use return types and type hints, this library requires PHP 7.1.
+
+`composer require nickdnk/zerobounce-php`
+
+### Tests
+
+Enter your API key into the `ZeroBounceTest` file and run it. This
+uses the test-emails supplied by ZeroBounce and will not cost you credit.
+
+### How to use
+
+```php
+use nickdnk\ZeroBounce\Email;
+use nickdnk\ZeroBounce\Result;
+use nickdnk\ZeroBounce\ZeroBounce;
+
+$handler = new ZeroBounce('my_api_key');
+
+$email = new Email(
+    
+    // The email address you want to check
+    'some-email@domain.com',
+    
+    // and if you have it, the IP address - otherwise null or omitted
+    '123.123.123.123'
+
+);
+
+try {
+
+    // Validate the email
+    $result = $handler->validateEmail($email);
+    
+    if ($result->getStatus() === Result::STATUS_VALID) {
+        
+        // All good
+        
+        if ($result->isFreeEmail()) {
+            
+            // Email address is free, such as @gmail.com, @hotmail.com.
+            
+        }
+        
+        /**
+        * The user object contains metadata about the email address
+        * supplied by ZeroBounce. All of these may be null or empty
+        * strings, so remember to check for that. 
+        */
+        $user = $result->getUser();
+        
+        $user->getCountry();
+        $user->getRegion();
+        $user->getZipCode();
+        $user->getCity();
+        $user->getGender();
+        $user->getFirstName();
+        $user->getLastName();
+        
+    } else if ($result->getStatus() === Result::STATUS_DO_NOT_MAIL) {
+        
+        // The substatus code will help you determine the exact issue:
+        
+        switch ($result->getSubStatus()) {
+            
+            case Result::SUBSTATUS_DISPOSABLE:
+            case Result::SUBSTATUS_TOXIC:
+                // Toxic or disposable.
+                break;
+                
+                // ... and so on.
+            
+        }
+        
+    } else if ($result->getStatus() === Result::STATUS_INVALID) {
+        
+        // Invalid email
+        
+    } else if ($result->getStatus() === Result::STATUS_SPAMTRAP) {
+        
+        // Spam-trap
+        
+    } else if ($result->getStatus() === Result::STATUS_ABUSE) {
+        
+        // Abuse
+        
+    } else if ($result->getStatus() === Result::STATUS_CATCH_ALL) {
+        
+        // Catch-all address, such as info@, help@ etc.
+        
+    } else if ($result->getStatus() === Result::STATUS_UNKNOWN) {
+        
+        // Unknown email status.
+       
+    }
+    
+    /*
+     * To find out how to use and react to different status and
+     * substatus codes, see the ZeroBounce documentation at:
+     * https://www.zerobounce.net/docs/?swift#version-2-v2
+     */
+
+} catch (\nickdnk\ZeroBounce\APIError $exception) {
+
+   // Something happened. Perhaps a bad API key or insufficient credit
+
+}
+```
+
+### Contact
+
+nickdnk (at) hotmail.com
+
+Use this library at your own risk. PRs are welcome :)
