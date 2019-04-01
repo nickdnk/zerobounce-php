@@ -4,7 +4,7 @@
 namespace nickdnk\ZeroBounce;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\TransferException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -117,7 +117,7 @@ class ZeroBounce
                 $json->processed_at
             );
 
-        } catch (RequestException $exception) {
+        } catch (BadResponseException $exception) {
 
             $this->handleResponse($exception->getResponse());
 
