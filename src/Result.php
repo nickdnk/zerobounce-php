@@ -95,9 +95,9 @@ class Result
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDomain(): string
+    public function getDomain(): ?string
     {
 
         return $this->domain;
