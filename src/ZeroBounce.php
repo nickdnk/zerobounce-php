@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\TransferException;
 use Psr\Http\Message\ResponseInterface;
+use stdClass;
 
 class ZeroBounce
 {
@@ -35,10 +36,10 @@ class ZeroBounce
     /**
      * @param ResponseInterface $response
      *
-     * @return \stdClass
+     * @return stdClass
      * @throws APIError
      */
-    private function handleResponse(ResponseInterface $response): \stdClass
+    private function handleResponse(ResponseInterface $response): stdClass
     {
 
         $json = json_decode($response->getBody());

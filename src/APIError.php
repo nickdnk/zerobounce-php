@@ -3,7 +3,9 @@
 
 namespace nickdnk\ZeroBounce;
 
-class APIError extends \Exception
+use Exception;
+
+class APIError extends Exception
 {
 
 }
