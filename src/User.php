@@ -8,18 +8,7 @@ class User
 
     private $firstName, $lastName, $gender, $city, $region, $zipCode, $country;
 
-    /**
-     * User constructor.
-     *
-     * @param $firstName
-     * @param $lastName
-     * @param $gender
-     * @param $city
-     * @param $region
-     * @param $zipCode
-     * @param $country
-     */
-    public function __construct($firstName, $lastName, $gender, $city, $region, $zipCode, $country)
+    public function __construct(?string $firstName, ?string $lastName, ?string $gender, ?string $city, ?string $region, ?string $zipCode, ?string $country)
     {
 
         $this->firstName = $firstName;
@@ -31,64 +20,43 @@ class User
         $this->country = $country;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFirstName()
+    public function getFirstName(): ?string
     {
 
         return $this->firstName;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLastName()
+    public function getLastName(): ?string
     {
 
         return $this->lastName;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getGender()
+    public function getGender(): ?string
     {
 
         return $this->gender;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCity()
+    public function getCity(): ?string
     {
 
         return $this->city;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getRegion()
+    public function getRegion(): ?string
     {
 
         return $this->region;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getZipCode()
+    public function getZipCode(): ?string
     {
 
         return $this->zipCode;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCountry()
+    public function getCountry(): ?string
     {
 
         return $this->country;

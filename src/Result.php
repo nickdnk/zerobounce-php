@@ -58,117 +58,78 @@ class Result
         $this->processedAt = $processedAt;
     }
 
-    /**
-     * @return string
-     */
     public function getAddress(): string
     {
 
         return $this->address;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
 
         return $this->status;
     }
 
-    /**
-     * @return string
-     */
     public function getSubStatus(): string
     {
 
         return $this->subStatus;
     }
 
-    /**
-     * @return string
-     */
     public function getAccount(): string
     {
 
         return $this->account;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDomain(): ?string
     {
 
         return $this->domain;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDidYouMean(): ?string
     {
 
         return $this->didYouMean;
     }
 
-    /**
-     * @return int|null
-     */
     public function getDomainAgeDays(): ?int
     {
 
         return $this->domainAgeDays;
     }
 
-    /**
-     * @return bool
-     */
     public function isFreeEmail(): bool
     {
 
         return $this->freeEmail;
     }
 
-    /**
-     * @return bool
-     */
     public function isMXFound(): bool
     {
 
         return $this->mxFound;
     }
 
-    /**
-     * @return string|null
-     */
     public function getMXRecord(): ?string
     {
 
         return $this->mxRecord;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSMTPProvider(): ?string
     {
 
         return $this->smtpProvider;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
 
         return $this->user;
     }
 
-    /**
-     * @return string
-     */
     public function getProcessedAt(): string
     {
 

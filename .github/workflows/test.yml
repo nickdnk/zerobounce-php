@@ -1,0 +1,24 @@
+name: Test
+on:
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php: [ '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
+    steps:
+      - uses: actions/checkout@v2
+      - run: mkdir -p build/logs
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{matrix.php}}
+      - name: Composer
+        run: composer install
+      - name: PHPUnit
+        run: php vendor/bin/phpunit
+        env:
+          ZEROBOUNCE_API_KEY: ${{ secrets.ZEROBOUNCE_API_KEY }}

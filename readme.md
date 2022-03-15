@@ -1,5 +1,7 @@
 # ZeroBounce PHP Library
 
+[![example workflow](https://github.com/nickdnk/zerobounce-php/actions/workflows/test.yml/badge.svg)](https://github.com/nickdnk/zerobounce-php/actions/workflows/test.yml)
+
 This library will allow you to integrate the **ZeroBounce** API in your project using modern PHP7 and an OOP structure.
 
 ### Prerequisites
@@ -11,7 +13,7 @@ You need an active account at https://zerobounce.net to use this library. From t
 
 To include this in your project, install it using Composer.
 
-As we use return types and type hints, this library requires PHP 7.1.
+As we use return types and type hints, this library requires PHP 7.1 and works on all versions up until PHP 8.1
 
 `composer require nickdnk/zerobounce-php`
 
@@ -124,9 +126,3 @@ try {
 
 }
 ```
-
-### Contact
-
-nickdnk (at) hotmail.com
-
-Use this library at your own risk. PRs are welcome :)

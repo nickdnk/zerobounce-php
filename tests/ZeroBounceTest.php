@@ -18,7 +18,7 @@ class ZeroBounceTest extends TestCase
     public static function setUpBeforeClass(): void
     {
 
-        self::$handler = new ZeroBounce('ENTER_VALID_API_KEY_FOR_TESTS');
+        self::$handler = new ZeroBounce(getenv('ZEROBOUNCE_API_KEY'));
 
     }
 
