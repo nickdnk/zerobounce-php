@@ -30,7 +30,9 @@ use nickdnk\ZeroBounce\Result;
 use nickdnk\ZeroBounce\ZeroBounce;
 
 // You can modify the timeout using the second parameter. Default is 15.
-$handler = new ZeroBounce('my_api_key', 30);
+// You an also pass proxy options to Guzzle using the third parameter.
+// See https://docs.guzzlephp.org/en/stable/request-options.html#proxy for details.
+$handler = new ZeroBounce('my_api_key', 30, ['https' => 'https://my-proxy-server']);
 
 $email = new Email(
     

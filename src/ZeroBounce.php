@@ -18,19 +18,22 @@ class ZeroBounce
      * ZeroBounce constructor.
      *
      * @param string $apiKey
-     * @param int    $timeout
+     * @param int $timeout
+     * @param array|null $proxy
      */
-    public function __construct(string $apiKey, int $timeout = 15)
+    public function __construct(string $apiKey, int $timeout = 15, ?array $proxy = null)
     {
 
         $this->apiKey = $apiKey;
-        $this->client = new Client(
-            [
-                'base_uri'        => 'https://api.zerobounce.net/v2/',
-                'timeout'         => $timeout,
-                'connect_timeout' => 10
-            ]
-        );
+        $options = [
+            'base_uri'        => 'https://api.zerobounce.net/v2/',
+            'timeout'         => $timeout,
+            'connect_timeout' => 10
+        ];
+        if ($proxy) {
+            $options['proxy'] = $proxy;
+        }
+        $this->client = new Client($options);
     }
 
     /**
