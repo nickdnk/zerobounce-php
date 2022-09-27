@@ -138,9 +138,9 @@ try {
 
 } catch (\nickdnk\ZeroBounce\APIError $exception) {
 
-   // Base exception. Both ServerException and ConnectionException extend from this, so you can
+   // Base exception. Both HttpException and ConnectionException extend from this, so you can
    // catch this to handle both errors. The somewhat odd naming for this was to avoid
-   // introducing breaking changes when ServerException and ConnectionException was added.
+   // introducing breaking changes when HttpException and ConnectionException was added.
    $exception->getMessage();
 
 }
