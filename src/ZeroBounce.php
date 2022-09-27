@@ -5,7 +5,7 @@ namespace nickdnk\ZeroBounce;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\TransferException;
+use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
 
@@ -40,7 +40,7 @@ class ZeroBounce
      * @param ResponseInterface $response
      *
      * @return stdClass
-     * @throws APIError
+     * @throws HttpException
      */
     private function handleResponse(ResponseInterface $response): stdClass
     {
@@ -49,22 +49,23 @@ class ZeroBounce
 
         if (!$json) {
 
-            throw new APIError(
-                'Failed to parse response from ZeroBounce as JSON. Possibly a server error. Message returned: '
-                . $response->getBody()
+            throw new HttpException(
+                'Failed to parse response from ZeroBounce as JSON. Possibly a server error. Response returned: '
+                . $response->getBody(),
+                $response
             );
 
         }
 
         if (property_exists($json, 'error')) {
 
-            throw new APIError($json->error);
+            throw new HttpException($json->error, $response);
 
         } else {
 
             if (property_exists($json, 'Message')) {
 
-                throw new APIError($json->Message);
+                throw new HttpException($json->Message, $response);
             }
 
         }
@@ -77,7 +78,8 @@ class ZeroBounce
      * @param Email $email
      *
      * @return Result
-     * @throws APIError
+     * @throws HttpException
+     * @throws ConnectionException
      */
     public function validateEmail(Email $email): Result
     {
@@ -123,16 +125,20 @@ class ZeroBounce
 
         } catch (BadResponseException $exception) {
 
-            $this->handleResponse($exception->getResponse());
+            // ZeroBounce returns 200 for expected errors (?), but in case they do have a server error
+            // we want to handle that as well.
+            $response = $exception->getResponse();
+            $this->handleResponse($response);
 
-            throw new APIError(
+            throw new HttpException(
                 'Failed to handle error response. Perhaps the ZeroBounce API has been modified. Response received: '
-                . $exception->getResponse()->getBody()
+                . $response->getBody(),
+                $response
             );
 
-        } catch (TransferException $exception) {
+        } catch (GuzzleException $exception) {
 
-            throw new APIError(
+            throw new ConnectionException(
                 'Failed to connect to ZeroBounce or connection timed out. Error: ' . $exception->getMessage()
             );
 

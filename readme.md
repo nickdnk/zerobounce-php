@@ -122,9 +122,26 @@ try {
      * https://www.zerobounce.net/docs/?swift#version-2-v2
      */
 
+} catch (\nickdnk\ZeroBounce\HttpException $exception) {
+
+   // ZeroBounce returned an error of some kind. Message is best-effort parsing.
+   $exception->getMessage();
+   // The response is available here also.
+   // The HTTP code is 200 for 400-range problems, such as invalid credentials,
+   // so don't rely too much on that. It is included mostly for debugging purposes.
+   $exception->getResponse(); 
+
+} catch (\nickdnk\ZeroBounce\ConnectionException $exception) {
+
+   // There was a problem connecting to ZeroBounce or the connection timed out waiting for a reply.
+   $exception->getMessage(); // will always return generic "request timed out or failed" message
+
 } catch (\nickdnk\ZeroBounce\APIError $exception) {
 
-   // Something happened. Perhaps a bad API key or insufficient credit.
+   // Base exception. Both ServerException and ConnectionException extend from this, so you can
+   // catch this to handle both errors. The somewhat odd naming for this was to avoid
+   // introducing breaking changes when ServerException and ConnectionException was added.
+   $exception->getMessage();
 
 }
 ```

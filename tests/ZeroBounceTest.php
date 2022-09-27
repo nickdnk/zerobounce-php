@@ -3,9 +3,10 @@
 
 namespace nickdnk\ZeroBounce\Tests;
 
+use nickdnk\ZeroBounce\ConnectionException;
 use nickdnk\ZeroBounce\Email;
-use nickdnk\ZeroBounce\APIError;
 use nickdnk\ZeroBounce\Result;
+use nickdnk\ZeroBounce\HttpException;
 use nickdnk\ZeroBounce\ZeroBounce;
 use PHPUnit\Framework\TestCase;
 
@@ -158,10 +159,15 @@ class ZeroBounceTest extends TestCase
 
     }
 
+    /**
+     * @return void
+     * @throws ConnectionException
+     * @throws HttpException
+     */
     public function testException()
     {
 
-        $this->expectException(APIError::class);
+        $this->expectException(HttpException::class);
 
         $handler = new ZeroBounce('invalid_key');
 
